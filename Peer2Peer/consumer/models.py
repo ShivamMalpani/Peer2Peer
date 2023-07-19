@@ -62,4 +62,10 @@ class Newsletter(models.Model): # sql
     userID = models.CharField()
     emailID = models.EmailField()
 
+class HomePage(): # sql
+    pass
 
+class Orders(models.Model): # nosql
+    orderID = models.IntegerField()
+    userID = models.CharField()
+    time = models.DateTimeField()
