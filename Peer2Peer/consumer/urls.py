@@ -1,11 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
-# from .views import
+from .views import ViewUpdateDeleteProducts
 from django.contrib import admin
 router = routers.DefaultRouter()
-router.register(r'products', )
+# router.register(r'products', )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include(router.urls)),
+    path('product/<int:pk>', ViewUpdateDeleteProducts.as_view(),name='list_products'),
+
 ]
