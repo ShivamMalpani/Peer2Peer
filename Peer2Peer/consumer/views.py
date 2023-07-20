@@ -13,6 +13,10 @@ class ViewUpdateDeleteProducts(generics.RetrieveUpdateDestroyAPIView):
         # return Response here
         pass
 
+class ListCreateProducts(generics.ListCreateAPIView):
+    queryset = Products.objects.all()
+    serializer_class = ListProductSerializer
+
 
 
 
