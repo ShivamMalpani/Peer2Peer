@@ -49,5 +49,19 @@ class ViewUpdateCart(APIView):
     def post(self,request,pk):
         # update api
         data = request.data
-        x = Cart.insert_one(data)
+        response = Cart.insert_one(data)
         return Response({"message":"Ok"})
+
+class InsertToCart(APIView):
+    def post(self,request,pk):
+        l = Cart.findone({"id":pk},{"products":1})
+        # p = []
+        if l:
+            data = request.data
+            products = l[0]["products"].append(data["product"])
+            Cart.update_one({"id":pk},{"$set":{"products":products, "quantity":data["quantity"]}})
+            Response({"Success"})
+        else :
+            x = Cart.insert_one(request.data)
+            Response("success")
+
