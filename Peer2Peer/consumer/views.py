@@ -41,6 +41,30 @@ class ViewUpdateCart(APIView):
 
         return Response({"data": cart["product_list"]})
 
+    def post(self, request, userID):
+        entry = Cart.find_one({"_id": userID})
+        print(12423)
+        print(entry)
+        # p = []
+        data = request.data
+
+        if entry:
+            # print(4553)
+            entry["product_list"][data["product"]] = data["quantity"]
+            # print(231)
+            Cart.update_one({"_id": userID}, {"$set": {"product_list":entry["product_list"]}})
+            # print(1279)
+            return Response("Success",status=status.HTTP_200_OK)
+        else:
+            x = Cart.insert_one({"_id":data["userID"], "product_list":{data["product"]:data["quantity"]}})
+            Response("success")
+
+    #     {
+    # "userID":"U123",
+    # "product":"Clothes",
+    # "quantity":1}
+
+
     # queryset = Products.objects.all()
 '''    def post(self, request, pk):
         # update api
@@ -50,17 +74,7 @@ class ViewUpdateCart(APIView):
 '''
 
 class InsertToCart(APIView):
-    def post(self, request, pk):
-        l = Cart.findone({"id": pk}, {"products": 1})
-        # p = []
-        if l:
-            data = request.data
-            products = l[0]["products"].append(data["product"])
-            Cart.update_one({"id": pk}, {"$set": {"products": products, "quantity": data["quantity"]}})
-            Response({"Success"})
-        else:
-            x = Cart.insert_one(request.data)
-            Response("success")
+    pass
 
 class clearCart(APIView):
     def delete(self, userID):
