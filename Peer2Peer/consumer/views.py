@@ -36,24 +36,18 @@ class ListCreateProducts(generics.ListCreateAPIView):
 
 class ViewUpdateCart(APIView):
 
-    def get(self, request, pk):
-        cart = Cart.find()
-        data = []
-        for product in cart:
-            print(product)
-            try:
-                data.append({"name": product["name"]})
-            except Exception as err:
-                pass
-        return Response({"data": data})
+    def get(self, request, userID):
+        cart = Cart.find_one({"_id":userID},{'product_list':1})
+
+        return Response({"data": cart["product_list"]})
 
     # queryset = Products.objects.all()
-    def post(self, request, pk):
+'''    def post(self, request, pk):
         # update api
         data = request.data
         response = Cart.insert_one(data)
         return Response({"message": "Ok"})
-
+'''
 
 class InsertToCart(APIView):
     def post(self, request, pk):
@@ -138,3 +132,7 @@ class ViewOrder(APIView):
     def get(self, orderid):
         response = Order.find({"id": orderid})
         return Response(response)
+
+class Coupon(APIView):
+    def get(self, code):
+        pass

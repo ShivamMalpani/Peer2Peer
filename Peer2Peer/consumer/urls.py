@@ -8,5 +8,5 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('product/<int:pk>/', ViewUpdateDeleteProducts.as_view(),name='view_products'),
     path('products_list/', ListCreateProducts.as_view(), name='list_products'),
-    path('cart/<str:pk>/',ViewUpdateCart.as_view(),name='cart')
+    path('cart/<str:userID>/',ViewUpdateCart.as_view(),name='cart')
 ]
