@@ -18,10 +18,6 @@ Comments = mydb["Comments"]
 Ratings = mydb["Ratings"]
 Order = mydb["Order"]
 
-mydict = {"id": "John", "address": "Highway 37"}
-x = Cart.insert_one(mydict)
-for x in Cart.find({'name': "John"}):
-    print(x)
 
 
 class ViewUpdateDeleteProducts(generics.RetrieveUpdateDestroyAPIView):
@@ -96,23 +92,33 @@ class ViewCreateContainer(APIView):
         print(id)
         data = request.data
         print(data)
-        Container.insert_one({"_id":id,"product_list": data["product_list"]})
+        Container.insert_one({"_id":data["id"],"product_list": data["product_list"]})
         return Response("Success")
 
-#     {"_id":"123", "product_list":{"P444":1}}
+#     Example: {"id":"123", "product_list":{"P444":1}}
 
 
 class ListCreateReviews(APIView):
-    def get(self, pk):
-        l = Comments.find({"product": pk})
-        Response(l)
+    def get(self,request, product):
+        # print(product)
+        data = Comments.find_one({"_id": product})
+        return Response(data)
 
-    def post(self, requests, pk, user):
-        l = Comments.findone({"product": pk})
+    def post(self, requests, product):
+        entry = Comments.find_one({"_id": product})
         data = requests.data
-        l = l["comments_list"].append({"user": user, "time": datetime.now(), "comment": data})
-        Response("Success")
 
+        if entry:
+            entry["reviews"][data["userID"]]=data["review"]
+        else:
+            print({"_id":product, "reviews":{data["userID"]:data["review"]}})
+            Comments.insert_one({"_id":product, "reviews":{data["userID"]:data["review"]}})
+        return Response("Success")
+
+# {
+# "review":"Good product",
+# "userID":"U123"
+# }
 
 class ViewUpdateRatings(APIView):
     def get(self, product, userID):
