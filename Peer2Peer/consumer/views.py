@@ -86,14 +86,20 @@ class ProductCartDetails(APIView):
 
 
 class ViewCreateContainer(APIView):
-    def get(self, id):
-        container = Container.findone({"id": id})
-        Response(container)
+    def get(self, request, id):
+        # print(id)
+        container = Container.find_one({"_id": id})
+        return Response(container)
 
-    def post(self, request):
+    def post(self, request, id):
+        # how to give id?
+        print(id)
         data = request.data
-        create = Container.insert_one(data)
-        Response("Success")
+        print(data)
+        Container.insert_one({"_id":id,"product_list": data["product_list"]})
+        return Response("Success")
+
+#     {"_id":"123", "product_list":{"P444":1}}
 
 
 class ListCreateReviews(APIView):

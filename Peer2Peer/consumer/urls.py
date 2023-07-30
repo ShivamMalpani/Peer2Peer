@@ -8,6 +8,7 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('product/<int:pk>/', ViewUpdateDeleteProducts.as_view(),name='view_products'),
     path('products_list/', ListCreateProducts.as_view(), name='list_products'),
-    path('cart/<str:userID>/',ViewUpdateCart.as_view(),name='cart'),
-    path('insert_cart/', InsertToCart.as_view(), name='cart'),
+    path('cart/<str:userID>/',ViewDeleteCart.as_view(),name='cart'),
+    path('insert_cart/', InsertToCart.as_view(), name='insert_cart'),
+    path('container/<str:id>', ViewCreateContainer.as_view(), name='container'),
 ]
