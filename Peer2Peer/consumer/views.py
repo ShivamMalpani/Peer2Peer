@@ -120,26 +120,27 @@ class ListCreateReviews(APIView):
 # }
 
 class ViewUpdateRatings(APIView):
-    def get(self, requests, product, userID,rate):
+    def get(self, requests, product, userID, rate):
         data = Ratings.find_one({"_id": product})
         print(data)
         try:
-            if data  and data["ratings"][userID]:
-                return Response({"rating":data["ratings"][userID]})
-            return Response({"rating":0})
-        except :
-            return Response({"rating":0})
+            if data and data["ratings"][userID]:
+                return Response({"rating": data["ratings"][userID]})
+            return Response({"rating": 0})
+        except:
+            return Response({"rating": 0})
+
     def put(self, requests, product, userID, rate):
-        data = Ratings.find_one({"_id":product})
+        data = Ratings.find_one({"_id": product})
         if data is None:
-            data = {"_id":product,"ratings":{}}
+            data = {"_id": product, "ratings": {}}
             entry = data["ratings"]
             entry[userID] = rate
-            Ratings.insert_one({"_id":product,"ratings":entry})
+            Ratings.insert_one({"_id": product, "ratings": entry})
         else:
             entry = data["ratings"]
             entry[userID] = rate
-            Ratings.update_one({"_id": product}, {"$set": {"ratings":entry}})
+            Ratings.update_one({"_id": product}, {"$set": {"ratings": entry}})
         print(entry)
         return Response("Success")
 
@@ -149,15 +150,13 @@ class ListRatings(APIView):
         data = Ratings.find_one({"_id": product})
         print(data)
         if data is None:
-            return Response({"ratings":0, "users_count":0})
+            return Response({"ratings": 0, "users_count": 0})
         count = 0
         sum = 0
         for userID in data["ratings"]:
             sum += int(data["ratings"][userID])
             count += 1
-        return Response({"ratings": sum/count, "users_count": count})
-
-
+        return Response({"ratings": sum / count, "users_count": count})
 
 
 class Checkout(generics.RetrieveUpdateAPIView):
