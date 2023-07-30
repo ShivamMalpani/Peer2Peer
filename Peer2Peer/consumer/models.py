@@ -21,7 +21,7 @@ class Reviews(models.Model): # sql/nosql
     productID = models.CharField(max_length=100)
     userID = models.CharField(max_length=100)
     review = models.CharField(max_length=100)
-    time = models.DateTimeField()
+    # time = models.DateTimeField()
     # add edit field later
     # edit = models.BooleanField(default=False)
     def __str__(self):
