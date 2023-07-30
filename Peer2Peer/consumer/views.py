@@ -19,7 +19,6 @@ Ratings = mydb["Ratings"]
 Order = mydb["Order"]
 
 
-
 class ViewUpdateDeleteProducts(generics.RetrieveUpdateDestroyAPIView):
     queryset = Products.objects.all()
     serializer_class = ListProductSerializer
@@ -38,8 +37,7 @@ class ViewDeleteCart(APIView):
         return Response({"data": cart["product_list"]})
 
     def delete(self, userID):
-        Cart.delete_one({"_id":userID})
-
+        Cart.delete_one({"_id": userID})
 
 
 '''    def post(self, request, pk):
@@ -75,7 +73,6 @@ class InsertToCart(APIView):
     # "quantity":1}
 
 
-
 class ProductCartDetails(APIView):
     def get(self):
         pass
@@ -92,14 +89,15 @@ class ViewCreateContainer(APIView):
         print(id)
         data = request.data
         print(data)
-        Container.insert_one({"_id":data["id"],"product_list": data["product_list"]})
+        Container.insert_one({"_id": data["id"], "product_list": data["product_list"]})
         return Response("Success")
+
 
 #     Example: {"id":"123", "product_list":{"P444":1}}
 
 
 class ListCreateReviews(APIView):
-    def get(self,request, product):
+    def get(self, request, product):
         # print(product)
         data = Comments.find_one({"_id": product})
         return Response(data)
@@ -109,11 +107,12 @@ class ListCreateReviews(APIView):
         data = requests.data
 
         if entry:
-            entry["reviews"][data["userID"]]=data["review"]
+            entry["reviews"][data["userID"]] = data["review"]
         else:
-            print({"_id":product, "reviews":{data["userID"]:data["review"]}})
-            Comments.insert_one({"_id":product, "reviews":{data["userID"]:data["review"]}})
+            print({"_id": product, "reviews": {data["userID"]: data["review"]}})
+            Comments.insert_one({"_id": product, "reviews": {data["userID"]: data["review"]}})
         return Response("Success")
+
 
 # {
 # "review":"Good product",
@@ -121,24 +120,44 @@ class ListCreateReviews(APIView):
 # }
 
 class ViewUpdateRatings(APIView):
-    def get(self, product, userID):
-        pass
+    def get(self, requests, product, userID,rate):
+        data = Ratings.find_one({"_id": product})
+        print(data)
+        try:
+            if data  and data["ratings"][userID]:
+                return Response({"rating":data["ratings"][userID]})
+            return Response({"rating":0})
+        except :
+            return Response({"rating":0})
+    def put(self, requests, product, userID, rate):
+        data = Ratings.find_one({"_id":product})
+        if data is None:
+            data = {"_id":product,"ratings":{}}
+            entry = data["ratings"]
+            entry[userID] = rate
+            Ratings.insert_one({"_id":product,"ratings":entry})
+        else:
+            entry = data["ratings"]
+            entry[userID] = rate
+            Ratings.update_one({"_id": product}, {"$set": {"ratings":entry}})
+        print(entry)
+        return Response("Success")
 
-    def update(self, product, userID):
-        pass
 
-
-class ListCreateRatings(APIView):
-    def get(self, product):
-        l = Ratings.findone({"product": product})
+class ListRatings(APIView):
+    def get(self, requests, product):
+        data = Ratings.find_one({"_id": product})
+        print(data)
+        if data is None:
+            return Response({"ratings":0, "users_count":0})
         count = 0
-        for i in l["ratings_list"]:
-            sum += i["rating"]
+        sum = 0
+        for userID in data["ratings"]:
+            sum += int(data["ratings"][userID])
             count += 1
-        Response(sum / count)
+        return Response({"ratings": sum/count, "users_count": count})
 
-    def post(self, product):
-        pass
+
 
 
 class Checkout(generics.RetrieveUpdateAPIView):
