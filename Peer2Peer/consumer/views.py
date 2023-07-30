@@ -34,13 +34,27 @@ class ListCreateProducts(generics.ListCreateAPIView):
     serializer_class = ListProductSerializer
 
 
-class ViewUpdateCart(APIView):
+class ViewDeleteCart(APIView):
 
     def get(self, request, userID):
-        cart = Cart.find_one({"_id":userID},{'product_list':1})
+        cart = Cart.find_one({"_id": userID}, {'product_list': 1})
 
         return Response({"data": cart["product_list"]})
 
+    def delete(self, userID):
+        Cart.delete_one({"_id":userID})
+
+
+
+'''    def post(self, request, pk):
+        # update api
+        data = request.data
+        response = Cart.insert_one(data)
+        return Response({"message": "Ok"})
+'''
+
+
+class InsertToCart(APIView):
     def post(self, request, userID):
         entry = Cart.find_one({"_id": userID})
         print(12423)
@@ -52,11 +66,11 @@ class ViewUpdateCart(APIView):
             # print(4553)
             entry["product_list"][data["product"]] = data["quantity"]
             # print(231)
-            Cart.update_one({"_id": userID}, {"$set": {"product_list":entry["product_list"]}})
+            Cart.update_one({"_id": userID}, {"$set": {"product_list": entry["product_list"]}})
             # print(1279)
-            return Response("Success",status=status.HTTP_200_OK)
+            return Response("Success", status=status.HTTP_200_OK)
         else:
-            x = Cart.insert_one({"_id":data["userID"], "product_list":{data["product"]:data["quantity"]}})
+            x = Cart.insert_one({"_id": data["userID"], "product_list": {data["product"]: data["quantity"]}})
             Response("success")
 
     #     {
@@ -65,20 +79,6 @@ class ViewUpdateCart(APIView):
     # "quantity":1}
 
 
-    # queryset = Products.objects.all()
-'''    def post(self, request, pk):
-        # update api
-        data = request.data
-        response = Cart.insert_one(data)
-        return Response({"message": "Ok"})
-'''
-
-class InsertToCart(APIView):
-    pass
-
-class clearCart(APIView):
-    def delete(self, userID):
-        pass
 
 class ProductCartDetails(APIView):
     def get(self):
@@ -109,10 +109,12 @@ class ListCreateReviews(APIView):
 
 
 class ViewUpdateRatings(APIView):
-    def get(self,product, userID):
+    def get(self, product, userID):
         pass
-    def update(self,product, userID):
+
+    def update(self, product, userID):
         pass
+
 
 class ListCreateRatings(APIView):
     def get(self, product):
@@ -127,7 +129,6 @@ class ListCreateRatings(APIView):
         pass
 
 
-
 class Checkout(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = CheckoutSerializer
@@ -137,8 +138,9 @@ class ListOrder(APIView):
     def get(self, user):
         pass
 
+
 class UpdateOrder(APIView):
-    def update(self,userID):
+    def update(self, userID):
         pass
 
 
@@ -146,6 +148,7 @@ class ViewOrder(APIView):
     def get(self, orderid):
         response = Order.find({"id": orderid})
         return Response(response)
+
 
 class Coupon(APIView):
     def get(self, code):
