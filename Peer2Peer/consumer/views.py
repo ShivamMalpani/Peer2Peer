@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -7,7 +8,8 @@ from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.views import APIView
 from .models import Products, Cart, Coupon
-from .serializers import ListProductSerializer, CheckoutSerializer, CouponSerializer
+from rest_framework.authtoken.models import Token
+from .serializers import ListProductSerializer, CheckoutSerializer, CouponSerializer, LoginSerializer
 import pymongo
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -18,6 +20,24 @@ Comments = mydb["Comments"]
 Ratings = mydb["Ratings"]
 Order = mydb["Order"]
 
+class LoginView(APIView):
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = authenticate(
+            request,
+            username=serializer.validated_data['username'],
+            password=serializer.validated_data['password']
+        )
+
+        if user is not None:
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key})
+        else:
+            return Response(
+                {'error': 'Invalid credentials'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
 
 class ViewUpdateDeleteProducts(generics.RetrieveUpdateDestroyAPIView):
     queryset = Products.objects.all()
