@@ -174,8 +174,7 @@ class UpdateOrder(APIView):
 
 
 class ViewOrder(APIView):
-    def get(self, request):
-        orderid=self.request.query_params.get('orderid')
+    def get(self, orderid):
         response = Order.find({"id": orderid})
         return Response(response)
 
