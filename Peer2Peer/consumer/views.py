@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework import generics
+from .serializers import UserSerializer
 from rest_framework.views import APIView
 from .models import Products, Cart, Coupon
 from rest_framework.authtoken.models import Token
@@ -20,13 +21,23 @@ Comments = mydb["Comments"]
 Ratings = mydb["Ratings"]
 Order = mydb["Order"]
 
+
+class UserSignupView(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class LoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = authenticate(
             request,
-            username=serializer.validated_data['username'],
+            username=serializer.validated_data['email'],
             password=serializer.validated_data['password']
         )
 

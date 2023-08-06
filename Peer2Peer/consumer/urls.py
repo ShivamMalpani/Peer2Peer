@@ -16,4 +16,5 @@ urlpatterns = [
     path('average_rating/<str:product>/', ListRatings.as_view(), name='rate'),
     path('coupon/', Coupons.as_view(), name='coupon'),
     path('login/', LoginView.as_view(), name='login'),
+    path('signup/', UserSignupView.as_view(), name='signup'),
 ]
