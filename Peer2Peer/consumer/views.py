@@ -5,10 +5,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.views import APIView
-from .models import Products, Cart
-from .serializers import ListProductSerializer, CheckoutSerializer
+from .models import Products, Cart, Coupon
+from .serializers import ListProductSerializer, CheckoutSerializer, CouponSerializer
 import pymongo
-import datetime
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["Peer2Peer"]
@@ -175,11 +174,31 @@ class UpdateOrder(APIView):
 
 
 class ViewOrder(APIView):
-    def get(self, orderid):
+    def get(self, request):
+        orderid=self.request.query_params.get('orderid')
         response = Order.find({"id": orderid})
         return Response(response)
 
 
-class Coupon(APIView):
-    def get(self, code):
-        pass
+class Coupons(APIView):
+    serializer_class = CouponSerializer
+
+    def get_queryset(self):
+        code = self.request.query_params.get('code')
+        queryset = Coupon.objects.all()
+
+        if code:
+            queryset = queryset.filter(code=code)
+        return queryset
+
+    def get(self,request):
+        queryset = self.get_queryset()
+        serializer = CouponSerializer(queryset,many=True)
+        return Response(serializer.data)
+    def post(self,request):
+        serializer = CouponSerializer(data=request.data)
+        if (serializer.is_valid()):
+            serializer.save()
+            return Response({"message":"Success"})
+        else :
+            return Response({"message":"Failure"})

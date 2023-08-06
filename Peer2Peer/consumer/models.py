@@ -7,7 +7,7 @@ class Products(models.Model): #sql
     seller = models.CharField(max_length=100) # sellerid
     create_time = models.DateTimeField()
     last_updated = models.DateTimeField()
-    # image =
+    image = models.ImageField(upload_to='product_images/')
     price = models.IntegerField()
     discount = models.IntegerField(default=0)
     customer_count = models.IntegerField()
@@ -69,3 +69,6 @@ class Orders(models.Model): # nosql
     orderID = models.IntegerField()
     userID = models.CharField(max_length=100)
     time = models.DateTimeField()
+
+class Coupon(models.Model):
+    code = models.CharField(max_length=100, primary_key=True)
