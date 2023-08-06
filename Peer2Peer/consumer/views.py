@@ -164,17 +164,20 @@ class Checkout(generics.RetrieveUpdateAPIView):
 
 
 class ListOrder(APIView):
-    def get(self, user):
-        pass
+    def get(self, request):
+        userid=self.request.query_params.get('orderid')
+        response = Order.find_all({"userid": userid})
+        return Response(response)
 
 
 class UpdateOrder(APIView):
-    def update(self, userID):
+    def put(self):
         pass
 
 
 class ViewOrder(APIView):
-    def get(self, orderid):
+    def get(self, request):
+        orderid=self.request.query_params.get('orderid')
         response = Order.find({"id": orderid})
         return Response(response)
 
