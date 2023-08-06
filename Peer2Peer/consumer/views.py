@@ -2,6 +2,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -23,9 +24,11 @@ class ViewUpdateDeleteProducts(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ListProductSerializer
 
 
+
 class ListCreateProducts(generics.ListCreateAPIView):
     queryset = Products.objects.all()
     serializer_class = ListProductSerializer
+
 
 
 class ViewDeleteCart(APIView):
@@ -96,6 +99,8 @@ class ViewCreateContainer(APIView):
 
 
 class ListCreateReviews(APIView):
+    pagination_class = PageNumberPagination
+    page_size = 2
     def get(self, request, product):
         # print(product)
         data = Comments.find_one({"_id": product})
@@ -107,6 +112,7 @@ class ListCreateReviews(APIView):
 
         if entry:
             entry["reviews"][data["userID"]] = data["review"]
+            Comments.update_one({"_id":product},{"$set": {"reviews": entry["reviews"]}})
         else:
             print({"_id": product, "reviews": {data["userID"]: data["review"]}})
             Comments.insert_one({"_id": product, "reviews": {data["userID"]: data["review"]}})
