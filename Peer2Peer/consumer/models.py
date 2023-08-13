@@ -1,12 +1,16 @@
+import uuid
+
 from django.db import models
 
 # Create your models here.
+
+class MyUUIDModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # other fields
 class Products(models.Model): #sql
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=10000)
-    seller = models.CharField(max_length=100) # sellerid
-    create_time = models.DateTimeField()
-    last_updated = models.DateTimeField()
+    seller = models.CharField(max_length=100) # sellerid    
     image = models.ImageField(upload_to='product_images/')
     price = models.IntegerField()
     discount = models.IntegerField(default=0)
