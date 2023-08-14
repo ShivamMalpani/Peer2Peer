@@ -1,70 +1,63 @@
-import math
+import pymongo
+# {'_id': ObjectId('64d9c37ca17aaa061db725f6'), 'character': '%', 'is_end_of_word': 'NO', 'children': [{'character': 's', 'is_end_of_word': 'YES', 'children': []}]}
+# [{'character': 's', 'is_end_of_word': 'YES', 'children': []}]
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["Peer2Peer"]
+Trie = mydb['Search']
+class Search:
+    # def __init__(self):
+    #     self.root = TrieNode()
+    #
+    # def insert(self, word):
+    #     node = self.root
+    #     for char in word:
+    #         if char not in node.children:
+    #             node.children[char] = TrieNode()
+    #         node = node.children[char]
+    #     node.is_end_of_word = "YES"
 
-# Function to calculate Euclidean distance between two points
-def euclidean_distance(point1, point2):
-    x1, y1 = point1
-    x2, y2 = point2
-    return math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
+    def insert1(self, word):
+        node = Trie.find_one()
+        word = word.lower()
+        root = node
+        for char in word:
+            if char not in node["children"].keys():
+                node["children"][char] = {"end": "NO", "children": {}}
+            node = node["children"][char]
+        node["end"] = "YES"
+        Trie.update_one({"character": "%"}, {"$set": {"children": root["children"]}})
 
-# Nearest neighbor algorithm to find the nearest unvisited customer
-def nearest_unvisited_customer(depot, unvisited_customers, customer_locations):
-    depot_location = depot
-    nearest_distance = float('inf')
-    nearest_customer = None
+    def search(self, word):
+        node = Trie.find_one()
+        for char in word:
+            if char not in node["children"].keys():
+                return "NO"
+            node = node["children"][char]
+        return node["end"]
 
-    for customer in unvisited_customers:
-        distance = euclidean_distance(depot_location, customer_locations[customer])
-        if distance < nearest_distance:
-            nearest_distance = distance
-            nearest_customer = customer
-    return nearest_customer
+    def starts_with(self, prefix):
+        node = self.root
+        for char in prefix:
+            if char not in node.children:
+                return "NO"
+            node = node.children[char]
+        return "YES"
 
-# Nearest neighbor heuristic for the multiple Traveling Salesman Problem (mTSP)
-def nearest_neighbor_mtsp(depot_locations, customer_locations):
-    num_depots = len(depot_locations)
-    num_customers = len(customer_locations)
-    num_drivers = num_depots
-    unvisited_customers = set(range(num_customers))
-    routes = [[] for _ in range(num_drivers)]
 
-    for driver in range(num_drivers):
-        current_depot = driver
-        current_route = routes[driver]
-        current_route.append(current_depot)  # Start at the depot
+# Example usage:
 
-        while unvisited_customers:
-            nearest_customer = nearest_unvisited_customer(
-                depot_locations[current_depot], unvisited_customers, customer_locations
-            )
-            if nearest_customer is not None:
-                current_route.append(nearest_customer)
-                unvisited_customers.remove(nearest_customer)
-                current_depot = nearest_customer
+node = Trie.find_one({"character": "%"})
+print(node)
 
-        # Return to the depot to complete the route
-        current_route.append(driver)
-
-    return routes
-
-# Example usage
-def main():
-    # Depot locations (format: (x, y))
-    depot_locations = [(0, 0), (10, 10)]
-
-    # Customer locations (format: (x, y))
-    customer_locations = [(1, 1), (2, 2), (4, 4), (6, 6), (8, 8)]
-
-    # Find routes using the nearest neighbor heuristic for mTSP
-    routes = nearest_neighbor_mtsp(depot_locations, customer_locations)
-
-    # Print the routes for each driver
-    for driver, route in enumerate(routes):
-        print(f"Route for driver {driver}:")
-        for index in route:
-            if index < len(customer_locations):
-                print(f"Customer at {customer_locations[index]}")
-            else:
-                print(f"Depot at {depot_locations[driver]}")
-
-if __name__ == '__main__':
-    main()
+print(node['children'])
+#
+# trie = Trie()
+search = Search()
+# search.insert1("border")
+# print(search.search("word"))
+# trie.insert("app")
+# trie.insert("banana")
+# print(trie.search("apple"))  # Output: True
+# print(trie.search("app"))    # Output: True
+# print(trie.search("ban"))    # Output: False
+# print(trie.starts_with("app")) # Output: True

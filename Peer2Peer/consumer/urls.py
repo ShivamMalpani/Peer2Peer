@@ -17,4 +17,5 @@ urlpatterns = [
     path('coupon/', Coupons.as_view(), name='coupon'),
     path('login/', LoginView.as_view(), name='login'),
     path('signup/', UserSignupView.as_view(), name='signup'),
+    path('search/',SearchProducts.as_view(),name='search'),
 ]

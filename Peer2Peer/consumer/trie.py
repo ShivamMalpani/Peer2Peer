@@ -1,7 +1,7 @@
 # current_node = {"character": 'a', "is_end_of_word": False,
 #                 "children": [{"character": 'b', "is_end_of_word": False, "children": []}]}
 
-from views import mydb
+
 Trie = mydb['Search']
 class TrieNode:
     def __init__(self):
@@ -22,9 +22,9 @@ class Search:
 
         for char in word:
             if char not in node.children:
-                node.children[char] = {"character": char, "is_end_of_word": False, "children": []}
+                node.children[char] = {"character": char, "is_end_of_word": "NO", "children": []}
             node = node.children[char]
-        node.is_end_of_word = True
+        node.is_end_of_word = "YES"
         Trie.update_one({"character": "%"}, {"$set": {"children": root.children}})
 
     def search(self, word):
@@ -33,7 +33,8 @@ class Search:
             if char not in node.children:
                 return False
             node = node.children[char]
-        return node.is_end_of_word
+        if node.is_end_of_word == "YES": return True
+        return False
 
     def starts_with(self, prefix):
         node = Trie.find_one({"character": "%"})
@@ -41,6 +42,7 @@ class Search:
             if char not in node.children:
                 return False
             node = node.children[char]
+        # To do: implement dfs
         return True
 
 
