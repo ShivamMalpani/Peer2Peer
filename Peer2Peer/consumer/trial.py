@@ -5,16 +5,6 @@ myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["Peer2Peer"]
 Trie = mydb['Search']
 class Search:
-    # def __init__(self):
-    #     self.root = TrieNode()
-    #
-    # def insert(self, word):
-    #     node = self.root
-    #     for char in word:
-    #         if char not in node.children:
-    #             node.children[char] = TrieNode()
-    #         node = node.children[char]
-    #     node.is_end_of_word = "YES"
 
     def insert1(self, word):
         node = Trie.find_one()
@@ -43,21 +33,11 @@ class Search:
             node = node.children[char]
         return "YES"
 
-
-# Example usage:
-
 node = Trie.find_one({"character": "%"})
 print(node)
-
 print(node['children'])
-#
-# trie = Trie()
+
 search = Search()
 # search.insert1("border")
 # print(search.search("word"))
-# trie.insert("app")
-# trie.insert("banana")
-# print(trie.search("apple"))  # Output: True
-# print(trie.search("app"))    # Output: True
-# print(trie.search("ban"))    # Output: False
-# print(trie.starts_with("app")) # Output: True
+

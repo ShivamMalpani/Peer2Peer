@@ -1,57 +1,47 @@
-# current_node = {"character": 'a', "is_end_of_word": False,
-#                 "children": [{"character": 'b', "is_end_of_word": False, "children": []}]}
+import pymongo
 
-
+# {'_id': ObjectId('64d9c37ca17aaa061db725f6'), 'character': '%', 'is_end_of_word': 'NO', 'children': [{'character': 's', 'is_end_of_word': 'YES', 'children': []}]}
+# [{'character': 's', 'is_end_of_word': 'YES', 'children': []}]
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["Peer2Peer"]
 Trie = mydb['Search']
-class TrieNode:
-    def __init__(self):
-        self.children = {}
-        self.is_end_of_word = False
 
 
 class Search:
-    def __init__(self):
-        self.root = TrieNode()
 
-    def insert(self, word):
-        # node = self.root
-        node = Trie.find_one({"character": "%"})
+    def insert1(self, word):
+        node = Trie.find_one()
+        word = word.lower()
         root = node
-        if node is None:
-            pass
-
         for char in word:
-            if char not in node.children:
-                node.children[char] = {"character": char, "is_end_of_word": "NO", "children": []}
-            node = node.children[char]
-        node.is_end_of_word = "YES"
-        Trie.update_one({"character": "%"}, {"$set": {"children": root.children}})
+            if char not in node["children"].keys():
+                node["children"][char] = {"end": "NO", "children": {}}
+            node = node["children"][char]
+        node["end"] = "YES"
+        Trie.update_one({"character": "%"}, {"$set": {"children": root["children"]}})
 
     def search(self, word):
-        node = Trie.find_one({"character": "%"})
+        node = Trie.find_one()
         for char in word:
-            if char not in node.children:
-                return False
-            node = node.children[char]
-        if node.is_end_of_word == "YES": return True
-        return False
+            if char not in node["children"].keys():
+                return "NO"
+            node = node["children"][char]
+        return node["end"]
 
     def starts_with(self, prefix):
-        node = Trie.find_one({"character": "%"})
+        node = self.root
         for char in prefix:
             if char not in node.children:
-                return False
+                return "NO"
             node = node.children[char]
-        # To do: implement dfs
-        return True
+        return "YES"
 
 
-# Example usage:
-trie = Trie()
-trie.insert("apple")
-trie.insert("app")
-trie.insert("banana")
-print(trie.search("apple"))  # Output: True
-print(trie.search("app"))  # Output: True
-print(trie.search("ban"))  # Output: False
-print(trie.starts_with("bana"))  # Output: True
+node = Trie.find_one({"character": "%"})
+print(node)
+print(node['children'])
+
+search = Search()
+# search.insert1("border")
+# print(search.search("word"))
+
