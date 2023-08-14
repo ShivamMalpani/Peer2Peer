@@ -12,6 +12,7 @@ from .models import Products, Cart, Coupon
 from rest_framework.authtoken.models import Token
 from .serializers import ListProductSerializer, CheckoutSerializer, CouponSerializer, LoginSerializer
 import pymongo
+from .trie import Search
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["Peer2Peer"]
@@ -218,6 +219,10 @@ class ViewOrder(APIView):
         response = Order.find({"id": orderid})
         return Response(response)
 
+class SearchProducts(APIView):
+    def get(self):
+        query = self.request.query_params.get('query')
+        response =
 
 class Coupons(APIView):
     serializer_class = CouponSerializer

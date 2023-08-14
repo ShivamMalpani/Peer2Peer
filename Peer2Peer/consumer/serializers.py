@@ -15,7 +15,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email','name', 'last_name','first_name', 'password')
+        fields = '__all__'
+        # fields = ('id', 'email','name', 'last_name','first_name', 'password')
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)

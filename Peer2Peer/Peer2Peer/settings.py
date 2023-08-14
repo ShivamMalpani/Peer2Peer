@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'consumer',
     'rest_framework',
     'rest_framework.authtoken',
-    'django.contrib.contenttypes'
 ]
 
 MIDDLEWARE = [
