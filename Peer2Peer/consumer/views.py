@@ -12,7 +12,7 @@ from .models import Products, Cart, Coupon
 from rest_framework.authtoken.models import Token
 from .serializers import ListProductSerializer, CheckoutSerializer, CouponSerializer, LoginSerializer
 import pymongo
-import trie
+from .trie import *
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["Peer2Peer"]
