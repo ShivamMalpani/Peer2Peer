@@ -20,6 +20,10 @@ class Search:
         node["end"] = "YES"
         Trie.update_one({"character": "%"}, {"$set": {"children": root["children"]}})
 
+
+
+
+
     def search(self, word):
         node = Trie.find_one()
         for char in word:
@@ -29,12 +33,7 @@ class Search:
         return node["end"]
 
     def starts_with(self, prefix):
-        node = self.root
-        for char in prefix:
-            if char not in node.children:
-                return "NO"
-            node = node.children[char]
-        return "YES"
+        pass
 
 
 node = Trie.find_one({"character": "%"})
