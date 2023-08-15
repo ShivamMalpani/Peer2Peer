@@ -11,7 +11,7 @@ class Products(models.Model): #sql
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=10000)
     seller = models.CharField(max_length=100) # sellerid    
-    image = models.ImageField(upload_to='product_images/')
+    image = models.ImageField(upload_to='')
     price = models.IntegerField()
     discount = models.IntegerField(default=0)
     customer_count = models.IntegerField()

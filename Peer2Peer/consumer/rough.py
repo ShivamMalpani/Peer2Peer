@@ -11,8 +11,8 @@ class DP():
         return dist
 
     def all_permutations(self, dist, memo, i, mask):
-        if mask == ((1 << i) | 3):return dist[1][i]
-        if memo[i][mask] != -1:return memo[i][mask]
+        if mask == ((1 << i) | 3): return dist[1][i]
+        if memo[i][mask] != -1: return memo[i][mask]
         res = 10 ** 9
         for j in range(1, V + 1):
             if (mask & (1 << j)) != 0 and j != i and j != 1:
@@ -21,7 +21,7 @@ class DP():
         return res
 
     def nodes(self, dist):
-        ans = 10**9
-        memo = pass
-        for i in range(1, V+1):
-            ans = min(dist,memo,ans, self.all_permutations(i, (1 << (V+1))-1) + dist[i][1])
+        ans = 10 ** 9
+        memo = [[-1] * (1 << (V + 1)) for _ in range(V + 1)]
+        for i in range(1, V + 1):
+            ans = min(dist, memo, ans, self.all_permutations(i, (1 << (V + 1)) - 1) + dist[i][1])

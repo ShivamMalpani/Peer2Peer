@@ -14,7 +14,8 @@ from .serializers import ListProductSerializer, CheckoutSerializer, CouponSerial
 import pymongo
 from .trie import *
 
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+myclient = pymongo.MongoClient("mongodb://172.21.176.1:27017/")
+# myclient = pymongo.MongoClient("mongodb://amazing_almeida:27017/")
 mydb = myclient["Peer2Peer"]
 Cart = mydb["Cart"]
 Container = mydb["Container"]
