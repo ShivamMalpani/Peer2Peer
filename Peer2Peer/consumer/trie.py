@@ -24,7 +24,6 @@ class Search:
         children = node['children']
         if node['children']['end'] == "YES":
             words.append(current_word)
-
         for i in children.keys():
             current_word += i
             self.dfs(node['children'][i],current_word, words)
@@ -42,7 +41,14 @@ class Search:
         return node["end"]
 
     def starts_with(self, prefix):
-        pass
+        node = Trie.find_one()
+        for char in prefix:
+            if char not in node['children'].keys():
+                return {}
+            node = node["children"][char]
+        words = []
+        productIDs = []
+        self.dfs(node, prefix, words, productIDs)
 
 
 node = Trie.find_one({"character": "%"})
