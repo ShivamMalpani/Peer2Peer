@@ -24,13 +24,12 @@ class Search:
         children = node['children']
         if node['children']['end'] == "YES":
             words.append(current_word)
+            # productIDs.append(node['productIDs'])
         for i in children.keys():
             current_word += i
-            self.dfs(node['children'][i],current_word, words)
+            self.dfs(node['children'][i], current_word, words)
             current_word -= i
         return
-
-
 
     def search(self, word):
         node = Trie.find_one()
@@ -49,6 +48,7 @@ class Search:
         words = []
         productIDs = []
         self.dfs(node, prefix, words, productIDs)
+        return words, productIDs
 
 
 node = Trie.find_one({"character": "%"})
@@ -58,4 +58,3 @@ print(node['children'])
 search = Search()
 # search.insert1("border")
 # print(search.search("word"))
-

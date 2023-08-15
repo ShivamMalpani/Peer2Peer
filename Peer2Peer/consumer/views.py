@@ -52,16 +52,15 @@ class LoginView(APIView):
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
+
 class ViewUpdateDeleteProducts(generics.RetrieveUpdateDestroyAPIView):
     queryset = Products.objects.all()
     serializer_class = ListProductSerializer
 
 
-
 class ListCreateProducts(generics.ListCreateAPIView):
     queryset = Products.objects.all()
     serializer_class = ListProductSerializer
-
 
 
 class ViewDeleteCart(APIView):
@@ -134,6 +133,7 @@ class ViewCreateContainer(APIView):
 class ListCreateReviews(APIView):
     pagination_class = PageNumberPagination
     page_size = 2
+
     def get(self, request, product):
         # print(product)
         data = Comments.find_one({"_id": product})
@@ -145,7 +145,7 @@ class ListCreateReviews(APIView):
 
         if entry:
             entry["reviews"][data["userID"]] = data["review"]
-            Comments.update_one({"_id":product},{"$set": {"reviews": entry["reviews"]}})
+            Comments.update_one({"_id": product}, {"$set": {"reviews": entry["reviews"]}})
         else:
             print({"_id": product, "reviews": {data["userID"]: data["review"]}})
             Comments.insert_one({"_id": product, "reviews": {data["userID"]: data["review"]}})
@@ -204,7 +204,7 @@ class Checkout(generics.RetrieveUpdateAPIView):
 
 class ListOrder(APIView):
     def get(self, request):
-        userid=self.request.query_params.get('orderid')
+        userid = self.request.query_params.get('orderid')
         response = Order.find_all({"userid": userid})
         return Response(response)
 
@@ -216,15 +216,16 @@ class UpdateOrder(APIView):
 
 class ViewOrder(APIView):
     def get(self):
-        orderid=self.request.query_params.get('orderid')
+        orderid = self.request.query_params.get('orderid')
         response = Order.find({"id": orderid})
         return Response(response)
+
 
 class SearchProducts(APIView):
     def get(self):
         query = self.request.query_params.get('query')
-        response = trie.Search.starts_with(query)
-        return response
+        words, productIDs = Search.starts_with(query)
+        return Response({"words": words, "productIDs": productIDs})
 
 
 class Coupons(APIView):
@@ -238,15 +239,15 @@ class Coupons(APIView):
             queryset = queryset.filter(code=code)
         return queryset
 
-    def get(self,request):
+    def get(self, request):
         queryset = self.get_queryset()
-        serializer = CouponSerializer(queryset,many=True)
+        serializer = CouponSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def post(self,request):
+    def post(self, request):
         serializer = CouponSerializer(data=request.data)
         if (serializer.is_valid()):
             serializer.save()
-            return Response({"message":"Success"})
-        else :
-            return Response({"message":"Failure"})
+            return Response({"message": "Success"})
+        else:
+            return Response({"message": "Failure"})

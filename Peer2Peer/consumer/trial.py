@@ -1,9 +1,12 @@
 import pymongo
+
 # {'_id': ObjectId('64d9c37ca17aaa061db725f6'), 'character': '%', 'is_end_of_word': 'NO', 'children': [{'character': 's', 'is_end_of_word': 'YES', 'children': []}]}
 # [{'character': 's', 'is_end_of_word': 'YES', 'children': []}]
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["Peer2Peer"]
 Trie = mydb['Search']
+
+
 class Search:
 
     def insert1(self, word):
@@ -33,6 +36,7 @@ class Search:
             node = node.children[char]
         return "YES"
 
+
 node = Trie.find_one({"character": "%"})
 print(node)
 print(node['children'])
@@ -40,4 +44,3 @@ print(node['children'])
 search = Search()
 # search.insert1("border")
 # print(search.search("word"))
-

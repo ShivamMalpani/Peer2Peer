@@ -1,7 +1,8 @@
 class DP():
     V = 4
     INF = 99999
-    def floydWarshall(self,graph):
+
+    def floydWarshall(self, graph):
         global V
         dist = list(map(lambda i: list(map(lambda j: j, i)), graph))
         for k in range(V):

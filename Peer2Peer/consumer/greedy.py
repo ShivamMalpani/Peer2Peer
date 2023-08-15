@@ -1,11 +1,13 @@
 import math
+
+
 class Greedy:
     def euclidean_distance(self, point1, point2):
         x1, y1 = point1
         x2, y2 = point2
-        return math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
+        return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 
-    def nearest_unvisited_customer(self,depot, unvisited_customers, customer_locations):
+    def nearest_unvisited_customer(self, depot, unvisited_customers, customer_locations):
         depot_location = depot
         nearest_distance = float('inf')
         nearest_customer = None

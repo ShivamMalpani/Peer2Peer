@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('consumer', '0002_coupon_remove_reviews_time'),
     ]
