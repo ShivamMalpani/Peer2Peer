@@ -20,7 +20,16 @@ class Search:
         node["end"] = "YES"
         Trie.update_one({"character": "%"}, {"$set": {"children": root["children"]}})
 
+    def dfs(self, node, current_word, words, productIDs):
+        children = node['children']
+        if node['children']['end'] == "YES":
+            words.append(current_word)
 
+        for i in children.keys():
+            current_word += i
+            self.dfs(node['children'][i],current_word, words)
+            current_word -= i
+        return
 
 
 
