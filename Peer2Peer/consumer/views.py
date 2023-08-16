@@ -75,6 +75,7 @@ class ViewDeleteCart(APIView):
 
     def delete(self, userID):
         Cart.delete_one({"_id": userID})
+        return Response("success")
 
 
 '''    def post(self, request, pk):
