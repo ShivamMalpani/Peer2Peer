@@ -125,8 +125,8 @@ class ViewCreateContainer(APIView):
         # print(id)
         container = Container.find_one({"_id": id})
         if container is None:
-            return Response({})
-        return Response(container)
+            return Response("gj")
+        return Response({"data":container["product_list"]})
 
     def post(self, request):
         # how to give id?
