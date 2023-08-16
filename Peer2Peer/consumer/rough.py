@@ -1,3 +1,6 @@
+import pymongo
+
+
 class DP():
     V = 4
     INF = 99999
@@ -26,3 +29,10 @@ class DP():
         memo = [[-1] * (1 << (V + 1)) for _ in range(V + 1)]
         for i in range(1, V + 1):
             ans = min(dist, memo, ans, self.all_permutations(i, (1 << (V + 1)) - 1) + dist[i][1])
+
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+# myclient = pymongo.MongoClient("mongodb://amazing_almeida:27017/")
+mydb = myclient["Peer2Peer"]
+Cart = mydb["Cart"]
+Cart.delete_many({})

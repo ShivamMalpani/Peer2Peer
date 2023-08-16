@@ -83,14 +83,15 @@ class ViewDeleteCart(APIView):
 
 
 class InsertToCart(APIView):
-    def post(self, request, userID):
+    def post(self, request):
+        userID = self.request.data.get("userID")
         entry = Cart.find_one({"_id": userID})
-        print(12423)
+        print(userID)
         print(entry)
         # p = []
         data = request.data
-
-        if entry:
+        print(data)
+        if entry is not None:
             # print(4553)
             entry["product_list"][data["product"]] = data["quantity"]
             # print(231)
@@ -99,7 +100,7 @@ class InsertToCart(APIView):
             return Response("Success", status=status.HTTP_200_OK)
         else:
             x = Cart.insert_one({"_id": data["userID"], "product_list": {data["product"]: data["quantity"]}})
-            Response("success")
+            return Response("success")
 
     #     {
     # "userID":"U123",
