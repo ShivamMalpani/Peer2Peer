@@ -66,8 +66,11 @@ class ListCreateProducts(generics.ListCreateAPIView):
 class ViewDeleteCart(APIView):
 
     def get(self, request, userID):
+        print(userID)
         cart = Cart.find_one({"_id": userID}, {'product_list': 1})
-
+        if cart is None:
+            return Response({"data":{}})
+        print(cart)
         return Response({"data": cart["product_list"]})
 
     def delete(self, userID):
