@@ -65,15 +65,17 @@ class ListCreateProducts(generics.ListCreateAPIView):
 
 class ViewDeleteCart(APIView):
 
-    def get(self):
-        userID = self.request.query_params.get("userID")
+    def get(self,request):
+        userID = self.request.query_params.get("userid")
+        print(userID)
         cart = Cart.find_one({"_id": userID}, {'product_list': 1})
         if cart is None:
             return Response({"data":{}})
         print(cart)
         return Response({"data": cart["product_list"]})
 
-    def delete(self, userID):
+    def delete(self):
+        userID = self.request.query_params.get("userid")
         Cart.delete_one({"_id": userID})
         return Response("success")
 
@@ -118,12 +120,15 @@ class ProductCartDetails(APIView):
 
 
 class ViewCreateContainer(APIView):
-    def get(self, request, id):
+    def get(self, request):
+        id = self.request.query_params.get('id')
         # print(id)
         container = Container.find_one({"_id": id})
+        if container is None:
+            return Response({})
         return Response(container)
 
-    def post(self, request, id):
+    def post(self, request):
         # how to give id?
         print(id)
         data = request.data
