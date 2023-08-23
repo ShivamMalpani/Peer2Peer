@@ -21,14 +21,19 @@ class Search:
         Trie.update_one({"character": "%"}, {"$set": {"children": root["children"]}})
 
     def dfs(self, node, current_word, words, productIDs):
-        children = node['children']
-        if node['children']['end'] == "YES":
+        if (node['end']=='YES'):
             words.append(current_word)
-            # productIDs.append(node['productIDs'])
-        for i in children.keys():
-            current_word += i
-            self.dfs(node['children'][i], current_word, words)
-            current_word -= i
+        # print(node['end'])
+        children = node['children']
+        for key in children:
+            # print(children[key])
+            # if children[key]['end'] == "YES":
+            #     words.append(current_word)
+                # productIDs.append(node['productIDs'])
+            for i in children.keys():
+                current_word += i
+                self.dfs(node['children'][i], current_word, words,productIDs)
+                current_word = current_word[:-1]
         return
 
     def search(self, word):
@@ -47,14 +52,15 @@ class Search:
             node = node["children"][char]
         words = []
         productIDs = []
+        print(node)
         self.dfs(node, prefix, words, productIDs)
         return words, productIDs
 
 
-node = Trie.find_one({"character": "%"})
-print(node)
-print(node['children'])
+
 
 search = Search()
-# search.insert1("border")
+print(search.starts_with(""))
+node = Trie.find_one({"character": "%"})
+# print(node['children'])
 # print(search.search("word"))
