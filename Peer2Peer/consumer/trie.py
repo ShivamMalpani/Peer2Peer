@@ -55,7 +55,7 @@ class Search:
 
 search = Search()
 # search.insert('vatican','P3423')
-print(search.starts_with("v"))
+# print(search.starts_with("v"))
 node = Trie.find_one({"character": "%"})
 # print(node['children'])
 # print(search.search("word"))

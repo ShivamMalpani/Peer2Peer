@@ -232,9 +232,10 @@ class ViewOrder(APIView):
 
 
 class SearchProducts(APIView):
-    def get(self):
+    def get(self,request):
         query = self.request.query_params.get('query')
-        words = Search.starts_with(query)
+        search = Search()
+        words = search.starts_with(query)
         return Response({"words": words})
 
 
