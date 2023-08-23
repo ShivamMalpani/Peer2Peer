@@ -234,8 +234,8 @@ class ViewOrder(APIView):
 class SearchProducts(APIView):
     def get(self):
         query = self.request.query_params.get('query')
-        words, productIDs = Search.starts_with(query)
-        return Response({"words": words, "productIDs": productIDs})
+        words = Search.starts_with(query)
+        return Response({"words": words})
 
 
 class Coupons(APIView):
