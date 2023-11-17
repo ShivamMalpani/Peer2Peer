@@ -1,0 +1,13 @@
+{
+    "builds": [{
+        "src": "Peer2Peer/wsgi.py",
+        "use": "@vercel/python",
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+    }],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "Peer2Peer/wsgi.py"
+        }
+    ]
+}
