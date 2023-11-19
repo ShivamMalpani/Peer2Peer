@@ -11,14 +11,10 @@ from rest_framework.views import APIView
 from .models import Products, Cart, Coupon
 from rest_framework.authtoken.models import Token
 from .serializers import ListProductSerializer, CheckoutSerializer, CouponSerializer, LoginSerializer
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
+from .connection import mydb
 from .trie import *
-import os
 
-uri = os.environ.get('MONGO')
-myclient = MongoClient(uri, server_api=ServerApi('1'))
-mydb = myclient["Peer2Peer"]
+
 Cart = mydb["Cart"]
 Container = mydb["Container"]
 Comments = mydb["Comments"]
