@@ -1,9 +1,9 @@
 import pymongo
+from views import mydb
 # {'_id': ObjectId('64d9d9bca17aaa061db725f8'), 'character': '%', 'end': 'NO','children':{}}
 # {'_id': ObjectId('64d9d9bca17aaa061db725f8'), 'character': '%', 'end': 'NO', 'children': {'a': {'end': 'YES', 'children': {'p': {'end': 'NO', 'children': {'p': {'end': 'NO', 'children': {'l': {'end': 'NO', 'children': {'e': {'end': 'YES', 'children': {}}}}}}}}}}, 'w': {'end': 'YES', 'children': {'o': {'end': 'YES', 'children': {'r': {'end': 'YES', 'children': {'d': {'end': 'YES', 'children': {}}}}}}}}, 'b': {'end': 'NO', 'children': {'o': {'end': 'NO', 'children': {'r': {'end': 'NO', 'children': {'d': {'end': 'NO', 'children': {'e': {'end': 'NO', 'children': {'r': {'end': 'YES', 'children': {}}}}}}}}}}}}, 'v': {'end': 'NO', 'children': {'a': {'end': 'NO', 'children': {'l': {'end': 'NO', 'children': {'e': {'end': 'NO', 'children': {'n': {'end': 'NO', 'children': {'t': {'end': 'NO', 'children': {'i': {'end': 'NO', 'children': {'n': {'end': 'NO', 'children': {'e': {'end': 'YES', 'children': {}, 'productID': 'P4253'}}}}}}}}}}}}}, 't': {'end': 'NO', 'children': {'i': {'end': 'NO', 'children': {'c': {'end': 'NO', 'children': {'a': {'end': 'NO', 'children': {'n': {'end': 'YES', 'children': {}, 'productID': 'P3423'}}}}}}}}}}}, 'e': {'end': 'NO', 'children': {'n': {'end': 'NO', 'children': {'i': {'end': 'NO', 'children': {'c': {'end': 'NO', 'children': {'e': {'end': 'YES', 'children': {}, 'productID': 'P423'}}}}}}}}}}}}}
 # [{'character': 's', 'is_end_of_word': 'YES', 'children': []}]
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = myclient["Peer2Peer"]
+
 Trie = mydb['Search']
 
 
